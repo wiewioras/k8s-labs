@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cka
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: developer
+rules:
+- apiGroups: ["", "batch", "autoscaling", "extensions", "apps"]
+  resources:
+  - "statefulsets"
+  - "horizontalpodautoscalers"
+  - "jobs"
+  - "replicationcontrollers"
+  - "services"
+  - "deployments"
+  - "replicasets"
+  - "pods"
+  verbs:  ["*"]
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: developer-binding
+  namespace: cka
+subjects:
+- kind: Group
+  name: developers
+  apiGroup: ""
+roleRef:
+  kind: ClusterRole
+  name: developer
+  apiGroup: ""
+
+

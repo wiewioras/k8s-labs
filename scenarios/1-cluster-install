@@ -1,0 +1,9 @@
+1) Prerequisites and packages (container runtimes)
+2) Kubeadm init - what happens? 
+3) Deployment via manifests
+4) Initializing calico - why patch?
+5) Initializing worker nodes
+
+
+6+) DaemonSets
+7+) Scheduler events

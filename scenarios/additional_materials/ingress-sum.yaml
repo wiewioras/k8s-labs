@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: myapp-ingress
+  namespace: myapp
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /bastion
+        backend:
+          serviceName: bastion
+          servicePort: 31222
+#      - path: /wordpress
+#        backend:
+#          serviceName: wordpress
+#          servicePort: 31235

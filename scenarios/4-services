@@ -1,0 +1,8 @@
+Scenario 4) Create service to access previously deployed application
+- Use 4-sum.yaml file to deploy service which will serve nginx application
+- What are possible parameters to be used to define/configure service
+
+Scenario 4) Questions
+- What is service
+- What it a role of kube-proxy in serving service endpoints
+- What is a difference between NodePort and ClusterIP

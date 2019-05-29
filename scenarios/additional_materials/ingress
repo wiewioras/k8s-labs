@@ -1,0 +1,26 @@
+#!/bin/bash
+cd
+git clone https://github.com/nginxinc/kubernetes-ingress.git
+cd kubernetes-ingress/deployments
+kubectl apply -f ~/kubernetes-ingress/deployments/rbac/rbac.yaml
+kubectl apply -f common/ns-and-sa.yaml
+kubectl apply -f common/default-server-secret.yaml
+kubectl apply -f common/nginx-config.yaml
+kubectl apply -f deployment/nginx-ingress.yaml
+kubectl create -f service/nodeport.yaml
+
+IC_HTTPS_PORT=$(kubectl get svc -n nginx-ingress -o yaml | grep 'targetPort: 443' -B4 | grep nodePort | awk {'print $2'})
+IC_IP=10.5.7.10
+#POD=$(kubectl get pods -n nginx-ingress  | grep nginx | awk {'print $1'})
+#kubectl port-forward -n nginx-ingress $POD 8080:8080
+
+
+cd
+cd kubernetes-ingress/examples/complete-example
+kubectl create -f cafe.yaml
+kubectl create -f cafe-secret.yaml
+kubectl create -f cafe-ingress.yaml
+
+# TEST:
+curl --resolve cafe.example.com:$IC_HTTPS_PORT:$IC_IP https://cafe.example.com:$IC_HTTPS_PORT/coffee --insecure
+curl --resolve cafe.example.com:$IC_HTTPS_PORT:$IC_IP https://cafe.example.com:$IC_HTTPS_PORT/tea --insecure

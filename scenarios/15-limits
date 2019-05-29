@@ -1,0 +1,8 @@
+Scenario 15) Requests and Limits
+- As dev apply 15-sum-user.yaml
+- Above file will add memory and cpu limits and requests for all pods.
+
+Scenario 15) Questions
+- Make sure that you understand difference between limits and requests, 
+  how to use them, and how the scheduling is impacted by requests.
+- Test limits putting some stress, e.g. via dd

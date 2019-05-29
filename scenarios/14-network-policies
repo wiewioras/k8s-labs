@@ -1,0 +1,10 @@
+Scenario 14) Network policies
+- As dev user apply 14-sum-user.yaml to create proper network policies
+- From now on bastion will be the only pod allowed to have full egress communication, and WordPress pod will be allowed only to reach MySQL server.
+- Bastion will allow only SSH ingress, MySQL will accept ingress only on port 3306 (MySQL), and WordPress will allow ingress on 80 
+- All pods will be allowed to 53 UDP port (DNS)
+
+Scenario 14) Questions
+- Make sure that you understand how to create ingress and egress policies
+- Do you know how to map specific policies to pods and namespaces?
+- What is the scope of policies limitations (IP ranges, ports, specific IPs, hosts, etc.)

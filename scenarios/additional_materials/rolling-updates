@@ -1,0 +1,7 @@
+1) Updating our workloads - bit of theory
+
+kubectl get events
+kubectl rollout history deployment X
+kubectl rollout history deployment X --revision=123
+kubectl rollout undo --dry-run=true deployment X
+kubectl rollout undo deployment X --to-revision=1

@@ -1,0 +1,10 @@
+Scenario 2) Deploy Metric server
+- Go to /root/k8s/scenarios and familiarize with 2-* files
+- Use 2-metrics-server.sh to deploy metrics server
+- Why is metrics.patch used
+
+Scenario 2) Questions
+- How is metrics server used
+- How are metrics collected
+- What is kube-system namespace and in general describe kubernetes namespaces concept
+- What objects were created to provide metrics server functionalities

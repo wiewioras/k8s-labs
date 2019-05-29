@@ -1,0 +1,63 @@
+1) Create developer cluster role (kubectl api-resources -o wide)
+2) create role binding
+3) Create Linux User
+4) Request access
+5) Use cluster as user
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cka
+
+1) 
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: developer
+rules:
+- apiGroups: ["", "batch", "autoscaling", "extensions", "apps"]
+  resources:
+  - "statefulsets"
+  - "horizontalpodautoscalers"
+  - "jobs"
+  - "replicationcontrollers"
+  - "services"
+  - "deployments"
+  - "replicasets"
+  - "pods"
+  verbs:  ["*"]
+
+
+2) #Can be also limited to namespace
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: developer-binding
+  namespace: cka
+subjects:
+- kind: Group
+  name: developers
+  apiGroup: ""
+roleRef:
+  kind: ClusterRole
+  name: developer
+  apiGroup: ""
+
+
+3) 
+kubeadm alpha kubeconfig user --client-name=cka --org=developers --apiserver-advertise-address 10.5.7.10 > cka.conf
+
+5)
+useradd -b /home -m -s /bin/bash -c "Our user" cka 
+cp cka.conf /home/cka/
+chown cka:cka -R /home/cka
+passwd cka
+As CKA:
+kubectl config set-cluster work --server=<k8s-api> --certificate-authority=keys/ca.crt --embed-certs=true
+kubectl cluster-info
+kubectl config set-credentials cka --client-certificate=keys/cka.crt --client-key=keys/cka.key
+kubectl config set-context cka --cluster=cka --user=cka --namespace=cka
+kubectl config use-context cka
+kubectl auth can-i create pod
+kubectl auth can-i get pod --subresource=log
+`

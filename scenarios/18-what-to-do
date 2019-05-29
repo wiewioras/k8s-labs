@@ -1,0 +1,15 @@
+Take 17-sum.yaml and figure out how to:
+1) Deploy it as dedicated user
+2) Use namespaces
+3) Configure ingress controller to handle our two nginx URLs
+4) Assign network policies to each pod - make only required traffic possible
+5) Deploy application two times in separate namespaces, with different labels (dev/prod?) and play with rollout command
+6) Scale your application
+7) Deploy NFS server (package on top of master node, or maybe control-plane pod?)
+8) Play with nginx so it will use NFS share for e.g. logs. Create Additional container in nginx pod which will read the NFS share and expose logs somehow
+
+
+What was not covered:
+1) DNS
+2) flanneld
+3) calico

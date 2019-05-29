@@ -1,0 +1,12 @@
+Scenario 3) Basic deployment
+- Use 3-sum.yaml file to deploy some basic application
+
+Scenario 3) Questions
+- Understand concept of pods, replica-sets and deployments
+- Role of controller-manager and kubelet in scheduling, deployment and lifecycle of pods, replica-sets and deployments
+- How to use labels to identify related objects
+- How to use deployments, deployment specific parameters
+- How to access container and container logs
+- How is internal communication between pods and containers provided
+- Check if there are any network limits:
+  - Access every container and try ping to other containers, including one from other namespaces (in e.g. kube-system)

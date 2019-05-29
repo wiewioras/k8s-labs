@@ -1,0 +1,18 @@
+Scenario 1A) Prepare VMs
+- Prepare lab environment using Vagrant and Vagrantfile available here:
+  https://raw.githubusercontent.com/wiewioras/k8s-labs/master/Vagrantfile 
+- Vagrant will provide following VMs with 2Gigs of memory and 2vCPUs
+- Proper internal networks will also be created and VMs will be accessible via following IPs:
+  - 10.5.7.10 - Master Node with SSH keys for access to workers
+  - 10.5.7.11 & .12 - worker1 and worker2
+  - root user with password r00tme can be used to access the nodes
+- All nodes have /etc/hosts file properly populated, and all needed packages installed and bash completion enabled for kubectl
+- Following repo will be downloaded: https://github.com/wiewioras/k8s-labs on master node
+- For more details see Vagrantfile
+
+Scenario 1B) Deploy kubernetes cluster
+- To deploy cluster use /root/init.sh script. 
+- Why you need to use apiserver-advertise-address with kubeadm init command?
+- Why there is calico.patch?
+- Use kubeadm join command returned by kubeadm on worker nodes to configure workers
+- Make sure that cluster is working properly (kubectl get nodes)

@@ -1,0 +1,11 @@
+Scenario 8) Jobs and CronJobs in Kubernetes
+- Since this scenario we will leave nginx application we build previously untouched.
+- This scenario covers simple usage of cronjob to perform containerized task of ETCD backup
+- Use 8-etcd-backup.yaml to deploy cronjob.
+- By default backup will run at midnight. Modify cronjob parameters to run it sooner, and check how it works.
+- Verify that backup was created in /data/etcd-backup localpath of master node 
+
+Scenario 8) Questions
+- Do you know how to use jobs and cronjobs?
+- What other purposes you see for jobs and cronjobs?
+- Do you understand how the backup of ETCD is performed?

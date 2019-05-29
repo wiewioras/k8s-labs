@@ -1,0 +1,176 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: registry
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  namespace: registry
+  labels:
+    type: local
+  name: registry-pv1
+spec:
+  accessModes:
+  - ReadWriteOnce
+  capacity:
+    storage: 100Mi
+  hostPath:
+    path: /docker_repo/data
+  persistentVolumeReclaimPolicy: Retain
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  namespace: registry
+  labels:
+    type: local
+  name: registry-pv2
+spec:
+  accessModes:
+  - ReadWriteOnce
+  capacity:
+    storage: 1Gi
+  hostPath:
+    path: /docker_repo/nginx
+  persistentVolumeReclaimPolicy: Retain
+---
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    namespace: registry
+    labels:
+      service: reponginx
+    name: reponginx
+  spec:
+    ports:
+    - name: "reponginx"
+      port: 443
+      targetPort: 443
+    selector:
+     service: reponginx
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    namespace: registry
+    labels:
+      service: registry
+    name: registry
+  spec:
+    ports:
+    - name: "registry"
+      port: 5000
+      targetPort: 5000
+    selector:
+      service: registry
+  status:
+    loadBalancer: {}
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    namespace: registry
+    labels:
+      service: reponginx
+    name: reponginx
+  spec:
+    replicas: 1
+    strategy:
+      type: Recreate
+    template:
+      metadata:
+        labels:
+          service: reponginx
+      spec:
+        tolerations:
+          - effect: NoSchedule
+            key: node-role.kubernetes.io/master
+        containers:
+        - image: nginx:1.12
+          name: reponginx
+          ports:
+          - containerPort: 443
+          resources: {}
+          volumeMounts:
+          - mountPath: /etc/nginx/conf.d
+            name: reponginx-claim
+        restartPolicy: Always
+        volumes:
+        - name: reponginx-claim
+          persistentVolumeClaim:
+            claimName: reponginx-claim
+  status: {}
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    namespace: registry
+    labels:
+      service: reponginx-claim
+    name: reponginx-claim
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 100Mi
+  status: {}
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    namespace: registry
+    labels:
+      service: registry
+    name: registry
+  spec:
+    replicas: 1
+    strategy:
+      type: Recreate
+    template:
+      metadata:
+        labels:
+          service: registry
+      spec:
+        tolerations:
+          - effect: NoSchedule
+            key: node-role.kubernetes.io/master
+        nodeSelector:
+          node-role.kubernetes.io/master: ""
+        containers:
+        - env:
+          - name: REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY
+            value: /data
+          image: registry:2
+          name: registry
+          ports:
+          - containerPort: 5000
+            hostIP: 127.0.0.1
+          resources: {}
+          volumeMounts:
+          - mountPath: /data
+            name: registry-claim
+        restartPolicy: Always
+        volumes:
+        - name: registry-claim
+          persistentVolumeClaim:
+            claimName: registry-claim
+  status: {}
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    namespace: registry
+    creationTimestamp: null
+    labels:
+      service: registry-claim
+    name: registry-claim
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+  status: {}
+kind: List
+metadata: {}

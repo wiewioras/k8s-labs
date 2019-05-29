@@ -1,0 +1,8 @@
+Scenario 5) Create multicontainer deployment
+- Use 5-sum.yaml file to deploy extend previous application with additional fluentd container
+- Collect information about possible usage of multi-container pods (ambasador, adapter, sidecar)
+
+Scenario 5) Questions
+- How to define multi-container pods
+- How multi-container pods are scheduled, where containers are deployed
+- How to access specific containers in multi-container pods (exec and logs)

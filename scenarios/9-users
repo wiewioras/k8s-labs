@@ -1,0 +1,18 @@
+Scenario 9) Users management, RBAC
+- Use 9-sum.sh bash script which will:
+  -  apply 9-users.yaml
+    - To generate myapp namespace, ClusterRole named developer and RoleBinding of group developers to ClusterRole developer within namespace myapp
+  - Create local system user and proper certificates using ‘kubeadm alpha kubeconfig user’. This user is only available on master node, and has password of r00tme.
+    You can ssh to master node also as this user.
+- From now on all task should be performed as dev user, and only specific actions should be performed by admin
+
+Scenario 9) Questions
+- Do you know how user is authenticated?
+- What is kubernetes context?
+- How to perform binding of user or group to specific roles
+- What are differences between types of binding:
+  - ClusterRole -> ClusterRoleBinding
+  - ClusterRole -> RoleBinding (namespace)
+  - Role -> RoleBinding
+- What is the structure of certificate for user and service users? 
+- Are you familiar with this doc? https://kubernetes.io/docs/setup/certificates/

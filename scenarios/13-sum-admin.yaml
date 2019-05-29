@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: roadmin
+  namespace: myapp
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    rbac.authorization.kubernetes.io/autoupdate: "true"
+  labels:
+  name: read-only
+rules:
+- apiGroups:
+  - ""
+  resources: ["*"]
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - extensions
+  resources: ["*"]
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - apps
+  resources: ["*"]
+  verbs:
+  - get
+  - list
+  - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: RoleBinding
+metadata:
+  name: read-only-binding
+  namespace: myapp
+subjects:
+- kind: ServiceAccount
+  name: roadmin
+  namespace: myapp
+roleRef:
+  kind: ClusterRole
+  name: read-only
+  apiGroup: rbac.authorization.k8s.io

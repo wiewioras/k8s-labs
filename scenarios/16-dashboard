@@ -1,0 +1,12 @@
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended/kubernetes-dashboard.yaml
+
+kubectl -n kube-system edit service kubernetes-dashboard #change to NodePort
+kubectl -n kube-system get service kubernetes-dashboard
+
+kubectl -n default create serviceaccount admin
+kubectl create clusterrolebinding admin --clusterrole=cluster-admin --serviceaccount=default:admin
+secret=$(kubectl get serviceaccount admin -o jsonpath='{.secrets[0].name}')
+token=$(kubectl get secret $secret -ojsonpath='{.data.token}' | base64 --decode)
+
+# CHECK
+https://10.5.7.10:<PORT>/#!/overview?namespace=default

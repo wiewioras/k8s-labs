@@ -1,0 +1,10 @@
+Scenario 7) Init containers, volumes and persistent storage
+- use 7-sum.yaml to improve previous app with persistent storage and init containers
+- Make sure that you understand the concept of volumes (non-persistent), persistent volumes, and persistent volume claims
+
+Scenario 7) Questions
+- How can init containers be used
+- How to pass different commands / entrypoints to containers
+- What is storage class? 
+- What are other possibilities for providing persistent storage (ceph? ECS?)
+- Do you know how to mount local data to specific container via persistent volume, proper claim, and storage class?

@@ -1,0 +1,8 @@
+Scenario 10) ConfigMaps. Secrets and Probes
+- As Admin use 10-sum-admin.yaml to create persistent volumes
+- As dev use 10-sum-user.yaml to deploy new WordPress application and MySQL which is briefly described on next slide
+- Probes will make sure that containers are ready (properly rolled out), and that are functioning without issues (liveness probes). 
+
+Scenario 10) Questions
+- Are you familiar with content of 10-sum-user.yaml file?
+- Do you know how to configure different types of probes?

@@ -1,0 +1,8 @@
+Scenario 1 Questions:
+
+- Which packages are needed to deploy Kubernetes
+- What is a role of each control plane component
+- How does kubeadm init works
+- How to use TLS Bootstrap to add worker node
+- What are manifests
+- What are DaemonSets and how can this be used to expand control plane of K8s cluster

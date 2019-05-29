@@ -1,0 +1,44 @@
+Scenario 6) Docker registry and images, basic DNS resolution
+- Deploy local repo - use “6-deploy-registry.yaml”
+- Get info about exposed repo service and check if it returns and empty list after 
+  $ curl http://<cluster_ip>:5000/v2/ 
+- Add registry.registry.svc.cluster.local and its IP to /etc/hosts of every node (More details in 6-docker-images file)
+- Allow docker to use your repo (More details in 6-docker-images file)
+- Build alpine bastion image which will be used in later scenario (scenario 13)
+- Tag image and push it to your local private repo
+ 
+Scenario 6) Questions
+- Familiarize with kubernetes deployment of local docker repository
+- Familiarize with Dockerfile structure and how to build images
+- Familiarize with tagging and naming concept for images
+- Is it possible to build image without registry? How can you propagate it to other nodes?
+
+
+==== Additional Notes ====
+1) alpinebastion/ directory contains Dockerfile and sshd_config and pregenerated keys to create 
+   bastion pod, which will be used in secenario 13.
+2) Build it with: docker build -t alpinebastion alpinebastion/
+3) We can run it as docker only (why?)
+4) Lets build k8s-powered docker repo using 6-deploy-registry.yaml
+5) Check if it is running: http://<cluster_ip>:5000/v2/ should return empty list
+
+6) Add registry.registry.svc.cluster.local and its IP to /etc/hosts of every node:
+     echo "$(kubectl get svc -n registry registry -o jsonpath='{.spec.clusterIP}') registry.registry.svc.cluster.local" >> /etc/hosts
+     echo "$(kubectl get svc -n registry registry -o jsonpath='{.spec.clusterIP}') registry.registry.svc.cluster.local" | ssh worker1 -T "cat >> /etc/hosts"
+     echo "$(kubectl get svc -n registry registry -o jsonpath='{.spec.clusterIP}') registry.registry.svc.cluster.local" | ssh worker2 -T "cat >> /etc/hosts"
+
+
+8) Allow our docker to use our insecure local repo:
+     cat >> /etc/docker/daemon.json <<-EOF
+     { "insecure-registries":["registry.registry.svc.cluster.local:5000"] }
+     EOF
+     scp /etc/docker/daemon.json worker1:/etc/docker/daemon.json
+     scp /etc/docker/daemon.json worker2:/etc/docker/daemon.json
+     systemctl restart docker.service
+     ssh worker1 'systemctl restart docker.service'
+     ssh worker2 'systemctl restart docker.service'
+
+9) Push simpleapp to our repo: 
+   docker tag alpinebastion registry.registry.svc.cluster.local:5000/alpinebastion
+   docker push registry.registry.svc.cluster.local:5000/alpinebastion
+10) From now on you can use registry.registry.svc.cluster.local:5000/<image_name> during build, instead of retaging.
